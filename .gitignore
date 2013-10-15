@@ -1,0 +1,16 @@
+*~
+*.pyc
+*.pyo
+*.swp
+*.mo 
+*.cfg
+dist
+*.egg-info
+build
+.project
+.pydevproject
+.coverage
+alembic.ini
+_build/
+pylint.out
+nosetests.xml
