@@ -4,6 +4,14 @@
 
 {% block content %}
 
+  __      _ _              _
+ / _|    (_) |            | |
+| |_ __ _ _| |_ ___  _   _| |_
+|  _/ _` | | __/ _ \| | | | __|
+| || (_| | | || (_) | |_| | |_
+|_| \__,_|_|\__\___/ \__,_|\__|
+
+
 
 faitout is a Free and Open-Source alternative to http://www.postgression.com/
 
@@ -54,5 +62,15 @@ Simply add the following to your .travis.yml
 
 env:
 - DATABASE_URL=$(curl {{ config.URL }}{{ url_for('token') }})
+
+
+
+
+                                            _               _   _        __
+                                           | |             | | (_)      / _|
+                                           | |_ _   _  ___ | |_ _  __ _| |_
+                                           | __| | | |/ _ \| __| |/ _` |  _|
+                                           | |_| |_| | (_) | |_| | (_| | |
+                                            \__|\__,_|\___/ \__|_|\__,_|_|
 
 {% endblock %}
