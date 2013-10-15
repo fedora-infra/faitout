@@ -1,0 +1,58 @@
+{% extends "master.html" %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+
+
+faitout is a Free and Open-Source alternative to http://www.postgression.com/
+
+
+It goal is to provide access to temporary postgresql databases which can be
+used for unit-test thus reducing the differences between testing and
+production environment
+
+
+How to use faitout?
+===================
+
+The usage is simple:
+
+  curl {{ config.URL }}{{ url_for('token') }}
+  postgres://user:password@host/db
+
+
+Retrieve the same information as json:
+
+  curl -H 'Accept: application/json' {{ config.URL }}{{ url_for('token') }}
+  {
+    "dbname": "dbname",
+    "username": "username",
+    "password": "password",
+    "port": 123,
+    "host": "host.com"
+  }
+
+
+
+faitout and python
+------------------
+
+Install the requests module from : http://www.python-requests.org/
+
+You may then set the SQLAlchemy URL in one line as follow:
+    DATABASE_URL = get('{{ config.URL }}{{ url_for('token') }}').text
+
+
+
+faitout and Travis CI
+---------------------
+
+Travis CI is a continuous integration service: https://travis-ci.org/
+
+Simply add the following to your .travis.yml
+
+env:
+- DATABASE_URL=$(curl {{ config.URL }}{{ url_for('token') }})
+
+{% endblock %}
