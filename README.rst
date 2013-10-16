@@ -6,6 +6,9 @@ faitout
 
 
 faitout is a Free and Open-Source alternative to http://www.postgression.com/
+This is flask application generating PostgreSQL databases on the fly
+and for a limited time, allowing people to test their code against
+an actual PostgreSQL database.
 
 
 Get this project:
