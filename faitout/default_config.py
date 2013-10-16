@@ -34,6 +34,8 @@ import os
 
 # url to the database server:
 DB_URL = 'sqlite:////var/tmp/faitout_dev.sqlite'
+# url to the admin database:
+ADMIN_DB_URL = 'sqlite:////var/tmp/faitout_dev_admin.sqlite'
 
 
 # The cron job can be set with any frequency but fedocal_cron
