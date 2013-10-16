@@ -90,6 +90,7 @@ def token():
             remote_ip=flask.request.remote_addr,
             host=APP.config['DB_HOST'],
             port=APP.config['DB_PORT'],
+            max_con=APP.config['MAX_CONNECTIONS'],
             outformat=outformat,
         )
     except faitoutlib.TooManyConnectionException as err:

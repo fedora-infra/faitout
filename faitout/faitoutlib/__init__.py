@@ -98,7 +98,8 @@ def create_session(db_url, debug=False, pool_recycle=3600):
 
 
 def get_new_connection(
-        session, admin_engine, remote_ip, host, port, outformat='text'):
+        session, admin_engine, remote_ip, host, port, max_con=3,
+        outformat='text'):
     """ Create a new connection to the database for the specified IP
     address.
 
@@ -118,6 +119,8 @@ def get_new_connection(
         database url.
     :arg port: the port of the postgresql server to return in the database
         url.
+    :kwarg max_con: specify the maximum number of active connections
+        allowed per IP at the same time.
     :kwarg outformat: specify the return format of the connection
         information. At the moment 'text' and 'json' are supported, 'text'
         being the default.
@@ -131,7 +134,7 @@ def get_new_connection(
     """
 
     ## Check if user is allowed to ask for a new connection
-    if model.Connection.by_ip(session, remote_ip, cnt=True) >= 3:
+    if model.Connection.by_ip(session, remote_ip, cnt=True) >= max_con:
         raise TooManyConnectionException(
             '%s has already 3 active connection, please re-try later' %
             remote_ip

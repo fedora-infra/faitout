@@ -49,3 +49,6 @@ CRON_FREQUENCY = 30
 
 # URL at which the application is made available
 URL = 'http://127.0.0.1:5000'
+
+# The maximum number of simultaneous connection allowed at the same time
+MAX_CONNECTIONS = 3
