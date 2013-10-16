@@ -17,6 +17,9 @@ Source:  https://github.com/fedora-infra/faitout
 
 Documentation: http://faitout.rtfd.org
 
+Testing instance: http://209.132.184.152/faitout
+
+
 Dependencies:
 -------------
 * `python http://www.python.org`_
