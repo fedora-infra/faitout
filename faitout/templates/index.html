@@ -42,6 +42,14 @@ Retrieve the same information as json:
   }
 
 
+Need to have one more connection while you are already at the maximum?
+
+Clean one of your connection by drop the database
+
+  curl {{ config.URL }}{{ url_for('clean_database', db_name='db_name') }}
+  Database db_name has been dropped
+
+
 
 faitout and python
 ------------------
