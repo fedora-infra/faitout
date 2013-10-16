@@ -55,7 +55,7 @@ To run them::
 
    ::
 
-    ./run_ests.sh -x
+    ./runtests.sh -x
 
 
 License:
