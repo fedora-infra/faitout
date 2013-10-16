@@ -22,9 +22,9 @@ Testing instance: http://209.132.184.152/faitout
 
 Dependencies:
 -------------
-* `python http://www.python.org`_
-* `python-flask http://flask.pocoo.org/`_
-* `python-psycopg2 http://www.initd.org/psycopg/`_
+* `python <http://www.python.org>`_
+* `python-flask <http://flask.pocoo.org/>`_
+* `python-psycopg2 <http://www.initd.org/psycopg/>`_
 
 
 Running a development instance:
