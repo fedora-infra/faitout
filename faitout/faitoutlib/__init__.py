@@ -276,12 +276,32 @@ def remove_connection(session, admin_engine, remote_ip, db_name):
     return 'Database %s has been dropped' % db_name
 
 
-def clean_database(admin_engine, db_name, username):
+def clean_database(admin_engine, db_name):
+    """ Using the provided engine, drop all tables ofthe specified database.
+
+    :arg admin_engine: the engine used to connect to the database
+    :arg db_name: the name of the database to clean
+
+    """
+    conn = admin_engine.connect()
+    try:
+        conn.execute("commit")
+        conn.execute("\c \"%s\"" % db_name)
+        conn.execute("commit")
+        conn.execute('drop schema public cascade;')
+        conn.execute("commit")
+        conn.execute('create schema public;')
+        conn.execute("commit")
+    finally:
+        conn.close()
+
+
+def drop_database(admin_engine, db_name, username):
     """ Using the provided engine, drop the specified database and user.
 
     :arg admin_engine: the engine used to connect to the database
     :arg db_name: the name of the database to drop
-    :arg username: the name of the usre to drop
+    :arg username: the name of the user to drop
 
     """
     conn = admin_engine.connect()
@@ -289,6 +309,7 @@ def clean_database(admin_engine, db_name, username):
         conn.execute("commit")
         conn.execute('drop database "%s";' % db_name)
         conn.execute("commit")
-        conn.execute("DROP USER \"%s\";" % username)
+        conn.execute('drop user "%s";' % username)
+        conn.execute("commit")
     finally:
         conn.close()
