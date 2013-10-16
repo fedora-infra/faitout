@@ -97,7 +97,8 @@ def create_session(db_url, debug=False, pool_recycle=3600):
     return scopedsession
 
 
-def get_new_connection(session, admin_engine, remote_ip, outformat='text'):
+def get_new_connection(
+        session, admin_engine, remote_ip, host, port, outformat='text'):
     """ Create a new connection to the database for the specified IP
     address.
 
@@ -113,6 +114,10 @@ def get_new_connection(session, admin_engine, remote_ip, outformat='text'):
         database to create the new database and user.
     :arg remote_ip: the IP address of the user that requested a new
         connection.
+    :arg host: the host / ip of the postgresql server to return in the
+        database url.
+    :arg port: the port of the postgresql server to return in the database
+        url.
     :kwarg outformat: specify the return format of the connection
         information. At the moment 'text' and 'json' are supported, 'text'
         being the default.
@@ -163,8 +168,8 @@ def get_new_connection(session, admin_engine, remote_ip, outformat='text'):
         "dbname": db_name,
         "username": user,
         "password": password,
-        "port": 5432,
-        "host": "host"
+        "port": port,
+        "host": host,
     }
     if outformat == 'json':
         return info

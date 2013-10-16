@@ -87,8 +87,10 @@ def token():
         output = faitoutlib.get_new_connection(
             SESSION,
             ADMIN_ENGINE,
-            flask.request.remote_addr,
-            outformat=outformat
+            remote_ip=flask.request.remote_addr,
+            host=APP.config['DB_HOST'],
+            port=APP.config['DB_PORT'],
+            outformat=outformat,
         )
     except faitoutlib.TooManyConnectionException as err:
         output = {
