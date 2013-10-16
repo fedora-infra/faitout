@@ -144,6 +144,7 @@ def get_new_connection(session, admin_engine, remote_ip, outformat='text'):
     try:
         session.commit()
     except Exception as err:
+        session.rollback()
         print >> sys.stderr, err
         raise FaitoutException(
             'An error has occured, please contact the administrator'
@@ -258,6 +259,7 @@ def remove_connection(session, admin_engine, remote_ip, db_name):
     try:
         session.commit()
     except Exception as err:
+        session.rollback()
         print >> sys.stderr, err
         raise FaitoutException(
             'An error has occured, please contact the administrator'
