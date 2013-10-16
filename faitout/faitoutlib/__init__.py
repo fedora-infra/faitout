@@ -262,16 +262,6 @@ def clean_connection(session, admin_engine, remote_ip, db_name):
             'An error has occured, please contact the administrator'
         )
 
-    connection.connection_active = False
-    try:
-        session.commit()
-    except Exception as err:
-        session.rollback()
-        print >> sys.stderr, err
-        raise FaitoutException(
-            'An error has occured, please contact the administrator'
-        )
-
     return 'Database %s has been cleaned' % db_name
 
 def clean_database(admin_engine, db_name):
