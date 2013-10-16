@@ -38,6 +38,7 @@ __version__ = '0.0.1'
 
 import json
 import os
+import sys
 
 import flask
 import faitoutlib
@@ -51,6 +52,7 @@ if 'FAITOUT_CONFIG' in os.environ:
     APP.config.from_envvar('FAITOUT_CONFIG')
 
 SESSION = faitoutlib.create_session(APP.config['DB_URL'])
+ADMIN_ENGINE = faitoutlib.get_engine(APP.config['ADMIN_DB_URL'])
 
 
 ## Flask application
@@ -61,15 +63,14 @@ def index():
     return flask.render_template('index.html')
 
 
-@APP.route('/token/')
-@APP.route('/token')
+@APP.route('/new/')
+@APP.route('/new')
 def token():
     """ Returns the URL to the database with user and password information.
     """
     status = 200
     outformat = 'text'
 
-    print flask.request.headers
     if 'Accept' in flask.request.headers:
         if flask.request.headers['Accept'] == 'application/json':
             outformat = 'json'
@@ -81,16 +82,15 @@ def token():
         mimetype = 'application/json'
     else:
         mimetype = 'text/plain'
-    print outformat
 
-    # TODO: call faitoutlib to get new user
     try:
         output = faitoutlib.get_new_connection(
             SESSION,
+            ADMIN_ENGINE,
             flask.request.remote_addr,
             outformat=outformat
         )
-    except faitoutlib.TooManyConnection as err:
+    except faitoutlib.TooManyConnectionException as err:
         output = {
             'ERROR': err.__class__.__name__,
             'description': err.message
@@ -98,6 +98,7 @@ def token():
         status = 400
         mimetype = 'application/json'
     except faitoutlib.FaitoutException as err:
+        print >> sys.stderr, err
         output = {
             'ERROR': err.__class__.__name__,
             'description': err.message
@@ -105,11 +106,60 @@ def token():
         status = 500
         mimetype = 'application/json'
 
-    if outformat == 'json':
+    if outformat == 'json' or mimetype == 'application/json':
         output = json.dumps(output)
 
     return flask.Response(
         response=output,
-        status=200,
+        status=status,
+        mimetype=mimetype
+    )
+
+
+@APP.route('/clean/<db_name>/')
+@APP.route('/clean/<db_name>')
+def clean_database(db_name):
+    """ Drops the provided dat.
+    """
+    status = 200
+    outformat = 'text'
+    mimetype = 'text/plain'
+
+    try:
+        output = faitoutlib.remove_connection(
+            SESSION,
+            ADMIN_ENGINE,
+            flask.request.remote_addr,
+            db_name
+        )
+    except faitoutlib.NoDatabaseException as err:
+        output = {
+            'ERROR': err.__class__.__name__,
+            'description': err.message
+        }
+        status = 404
+        mimetype = 'application/json'
+    except faitoutlib.WrongOriginException as err:
+        output = {
+            'ERROR': err.__class__.__name__,
+            'description': err.message
+        }
+        status = 403
+        mimetype = 'application/json'
+    except faitoutlib.FaitoutException as err:
+        print >> sys.stderr, err
+        output = {
+            'ERROR': err.__class__.__name__,
+            'description': err.message
+        }
+        status = 500
+        mimetype = 'application/json'
+
+    if outformat == 'json' or mimetype == 'application/json':
+        output = json.dumps(output)
+
+    return flask.Response(
+        response=output,
+        status=status,
         mimetype=mimetype
     )
