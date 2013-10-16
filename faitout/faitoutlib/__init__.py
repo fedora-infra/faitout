@@ -284,10 +284,10 @@ def clean_database(admin_engine, db_name):
     conn = admin_engine.connect()
     try:
         conn.execute("commit")
-        conn.execute("SELECT pg_terminate_backend(pg_stat_activity.procpid)"
+        conn.execute("SELECT pg_terminate_backend(pg_stat_activity.pid)"
                      " FROM pg_stat_activity"
-                     " WHERE pg_stat_activity.datname = 'TARGET_DB'"
-                     " AND procpid <> pg_backend_pid();")
+                     " WHERE pg_stat_activity.datname = '%s'"
+                     " AND pid <> pg_backend_pid();" % db_name)
         conn.execute("commit")
         conn.execute('drop database "%s";' % db_name)
         conn.execute("commit")
@@ -367,10 +367,10 @@ def drop_database(admin_engine, db_name, username):
     conn = admin_engine.connect()
     try:
         conn.execute("commit")
-        conn.execute("SELECT pg_terminate_backend(pg_stat_activity.procpid)"
+        conn.execute("SELECT pg_terminate_backend(pg_stat_activity.pid)"
                      " FROM pg_stat_activity"
-                     " WHERE pg_stat_activity.datname = 'TARGET_DB'"
-                     " AND procpid <> pg_backend_pid();")
+                     " WHERE pg_stat_activity.datname = '%s'"
+                     " AND pid <> pg_backend_pid();" % db_name)
         conn.execute("commit")
         conn.execute('drop database "%s";' % db_name)
         conn.execute("commit")
