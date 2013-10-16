@@ -216,8 +216,85 @@ def create_database(admin_engine, db_name, username, password):
     finally:
         conn.close()
 
+def clean_connection(session, admin_engine, remote_ip, db_name):
+    """ Drop all the table of the specified database.
 
-def remove_connection(session, admin_engine, remote_ip, db_name):
+    In case the IP address provided is not the IP that requested the
+    connection a WrongOriginException exception is thrown.
+
+    A FaitoutException is thrown if something went wrong at the database
+    level.
+
+    :arg session: the session with which to connect to the database.
+    :arg admin_engine: the engine with which to connect to the postgresql
+        database to create the new database and user.
+    :arg remote_ip: the IP address of the user that requested a new
+        connection.
+    :arg db_name: the name of the database to drop.
+    :raise WrongOriginException: if the user requested to drop the db from
+        a different IP than the user asking for the db.
+    :raise FaitoutException: generic exception raised in case of problem.
+    :return: a string of the URL to connect to the database if outformat
+        is 'text', a dictionnary of the same information if outformat is
+        'json'.
+
+    """
+    try:
+        connection = model.Connection.by_db_name(session, db_name)
+    except NoResultFound:
+        raise NoDatabaseException(
+            'Database %s could not be found' % db_name)
+
+    if connection.connection_active is False:
+        raise NoDatabaseException(
+            'No active database named %s could be found' % db_name)
+
+    if connection.connection_ip != remote_ip:
+        raise WrongOriginException(
+            '%s did not request this database and thus is not allowed to '
+            'clean it.' % remote_ip)
+
+    try:
+        clean_database(admin_engine, db_name)
+    except Exception as err:
+        print >> sys.stderr, err
+        raise FaitoutException(
+            'An error has occured, please contact the administrator'
+        )
+
+    connection.connection_active = False
+    try:
+        session.commit()
+    except Exception as err:
+        session.rollback()
+        print >> sys.stderr, err
+        raise FaitoutException(
+            'An error has occured, please contact the administrator'
+        )
+
+    return 'Database %s has been cleaned' % db_name
+
+def clean_database(admin_engine, db_name):
+    """ Using the provided engine, drop all tables ofthe specified database.
+
+    :arg admin_engine: the engine used to connect to the database
+    :arg db_name: the name of the database to clean
+
+    """
+    conn = admin_engine.connect()
+    try:
+        conn.execute("commit")
+        conn.execute("\c \"%s\"" % db_name)
+        conn.execute("commit")
+        conn.execute('drop schema public cascade;')
+        conn.execute("commit")
+        conn.execute('create schema public;')
+        conn.execute("commit")
+    finally:
+        conn.close()
+
+
+def drop_connection(session, admin_engine, remote_ip, db_name):
     """ Drop the specified database and the user associated with it.
 
     In case the IP address provided is not the IP that requested the
@@ -256,7 +333,7 @@ def remove_connection(session, admin_engine, remote_ip, db_name):
             'drop it.' % remote_ip)
 
     try:
-        clean_database(admin_engine, db_name, connection.connection_user)
+        drop_database(admin_engine, db_name, connection.connection_user)
     except Exception as err:
         print >> sys.stderr, err
         raise FaitoutException(
@@ -274,26 +351,6 @@ def remove_connection(session, admin_engine, remote_ip, db_name):
         )
 
     return 'Database %s has been dropped' % db_name
-
-
-def clean_database(admin_engine, db_name):
-    """ Using the provided engine, drop all tables ofthe specified database.
-
-    :arg admin_engine: the engine used to connect to the database
-    :arg db_name: the name of the database to clean
-
-    """
-    conn = admin_engine.connect()
-    try:
-        conn.execute("commit")
-        conn.execute("\c \"%s\"" % db_name)
-        conn.execute("commit")
-        conn.execute('drop schema public cascade;')
-        conn.execute("commit")
-        conn.execute('create schema public;')
-        conn.execute("commit")
-    finally:
-        conn.close()
 
 
 def drop_database(admin_engine, db_name, username):

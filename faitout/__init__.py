@@ -122,14 +122,14 @@ def token():
 @APP.route('/clean/<db_name>/')
 @APP.route('/clean/<db_name>')
 def clean_database(db_name):
-    """ Drops the provided dat.
+    """ Clean the provided database.
     """
     status = 200
     outformat = 'text'
     mimetype = 'text/plain'
 
     try:
-        output = faitoutlib.remove_connection(
+        output = faitoutlib.clean_connection(
             SESSION,
             ADMIN_ENGINE,
             flask.request.remote_addr,
