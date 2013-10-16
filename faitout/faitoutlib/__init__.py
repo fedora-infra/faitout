@@ -257,7 +257,7 @@ def clean_connection(session, admin_engine, remote_ip, db_name):
     try:
         clean_database(admin_engine, db_name)
     except Exception as err:
-        print >> sys.stderr, err
+        print >> sys.stderr, 'ERROR while cleaning\n', err
         raise FaitoutException(
             'An error has occured, please contact the administrator'
         )
@@ -333,7 +333,7 @@ def drop_connection(session, admin_engine, remote_ip, db_name):
     try:
         drop_database(admin_engine, db_name, connection.connection_user)
     except Exception as err:
-        print >> sys.stderr, err
+        print >> sys.stderr, 'ERROR while dropping\n', err
         raise FaitoutException(
             'An error has occured, please contact the administrator'
         )
