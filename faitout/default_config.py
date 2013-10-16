@@ -34,9 +34,15 @@ import os
 
 # url to the database server:
 DB_URL = 'sqlite:////var/tmp/faitout_dev.sqlite'
+
 # url to the admin database:
 ADMIN_DB_URL = 'sqlite:////var/tmp/faitout_dev_admin.sqlite'
 
+# Default port of a postgresql server
+DB_PORT = 5432
+
+# Host of the postgresql server to return to in the db url
+DB_HOST = '127.0.0.1'
 
 # The cron job can be set with any frequency but fedocal_cron
 CRON_FREQUENCY = 30
