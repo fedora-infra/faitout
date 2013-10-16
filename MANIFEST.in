@@ -1,0 +1,5 @@
+include LICENSE.txt requirements.txt createdb.py runserver.py
+recursive-include faitout *.html
+graft faitout/static
+#include doc/conf.py doc/Makefile doc/*.rst
+

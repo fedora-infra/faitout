@@ -1,0 +1,7 @@
+setuptools
+Flask
+psycopg2
+SQLAlchemy >= 0.7
+alembic
+jinja2 >= 2.4
+
