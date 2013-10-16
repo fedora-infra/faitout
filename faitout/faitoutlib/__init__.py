@@ -195,15 +195,17 @@ def create_database(admin_engine, db_name, username, password):
 
     """
     conn = admin_engine.connect()
-    conn.execute("commit")
-    conn.execute("CREATE USER \"%s\" WITH PASSWORD '%s';" %
-                 (username, password))
-    conn.execute("commit")
-    conn.execute('create database "%s";' % db_name)
-    conn.execute("commit")
-    conn.execute("GRANT ALL PRIVILEGES ON DATABASE \"%s\" to \"%s\";" %
-                 (db_name, username))
-    conn.close()
+    try:
+        conn.execute("commit")
+        conn.execute("CREATE USER \"%s\" WITH PASSWORD '%s';" %
+                     (username, password))
+        conn.execute("commit")
+        conn.execute('create database "%s";' % db_name)
+        conn.execute("commit")
+        conn.execute("GRANT ALL PRIVILEGES ON DATABASE \"%s\" to \"%s\";" %
+                     (db_name, username))
+    finally:
+        conn.close()
 
 
 def remove_connection(session, admin_engine, remote_ip, db_name):
@@ -273,8 +275,10 @@ def clean_database(admin_engine, db_name, username):
 
     """
     conn = admin_engine.connect()
-    conn.execute("commit")
-    conn.execute('drop database "%s";' % db_name)
-    conn.execute("commit")
-    conn.execute("DROP USER \"%s\";" % username)
-    conn.close()
+    try:
+        conn.execute("commit")
+        conn.execute('drop database "%s";' % db_name)
+        conn.execute("commit")
+        conn.execute("DROP USER \"%s\";" % username)
+    finally:
+        conn.close()
