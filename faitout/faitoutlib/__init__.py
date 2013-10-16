@@ -163,7 +163,7 @@ def get_new_connection(session, admin_engine, remote_ip, outformat='text'):
         "dbname": db_name,
         "username": user,
         "password": password,
-        "port": 123,
+        "port": 5432,
         "host": "host"
     }
     if outformat == 'json':
