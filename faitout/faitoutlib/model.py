@@ -83,8 +83,10 @@ class Connection(BASE):
     connection_id = sa.Column(sa.Integer, primary_key=True)
     connection_user = sa.Column(sa.String(20), nullable=False)
     connection_mdp = sa.Column(sa.String(40), nullable=False)
-    connection_db = sa.Column(sa.String(15), nullable=False)
+    connection_db_name = sa.Column(sa.String(15), nullable=False,
+                                   unique=True, index=True)
     connection_ip = sa.Column(sa.String(20), nullable=False, index=True)
+    connection_active = sa.Column(sa.Boolean, nullable=False, default=True)
     creation_date = sa.Column(sa.DateTime, nullable=False,
                               default=sa.func.current_timestamp())
 
@@ -92,7 +94,7 @@ class Connection(BASE):
         """ Constructor instanciating the defaults values. """
         self.connection_user = user
         self.connection_mdp = mdp
-        self.connection_db = db
+        self.connection_db_name = db
         self.connection_ip = ip
 
     def __repr__(self):
@@ -100,7 +102,7 @@ class Connection(BASE):
         """
         return "<Connection('%s' ip:'%s' date:'%s' db:'%s')>" % (
             self.connection_id, self.connection_ip, self.creation_date,
-            connection_db)
+            self.connection_db_name)
 
     def save(self, session):
         """ Save the object into the database. """
@@ -120,24 +122,52 @@ class Connection(BASE):
         return session.query(cls).all()
 
     @classmethod
-    def by_ip(cls, session, ip):
-        """ Retrieve all the Connection associated with the specified IP.
+    def by_ip(cls, session, ip, cnt=False):
+        """ Retrieve all the active Connection associated with the
+        specified IP.
 
         :arg session: the session with which to connect to the database.
         :arg remote_ip: the IP address of the user that requested a new
             connection.
+        :kwarg cnt: a boolean to specify wether to return the list of
+            connection associated with this IP or just the number of
+            entries.
 
         """
-        return session.query(
+        query = session.query(
             cls
         ).filter(
             cls.connection_ip == ip
-        ).all()
+        ).filter(
+            cls.connection_active == True
+        )
+
+        if cnt:
+            return query.count()
+        else:
+            return query.all()
+
+    @classmethod
+    def by_db_name(cls, session, db_name):
+        """ Retrieve the Connection associated with the specified database
+        name.
+
+        :arg session: the session with which to connect to the database.
+        :arg db_name: the name of the database to retrieve.
+
+        """
+        query = session.query(
+            cls
+        ).filter(
+            cls.connection_db_name == db_name
+        )
+
+        return query.one()
 
     @classmethod
     def older_than(cls, session, limit):
-        """ Retrieve all the Connection that have been created before the
-        specified limit.
+        """ Retrieve all the active Connection that have been created
+        before the specified limit.
 
         :arg session: the session with which to connect to the database.
         :arg limit: a datetime object specifying the datetime limit after
@@ -148,4 +178,6 @@ class Connection(BASE):
             cls
         ).filter(
             cls.creation_date <= limit
+        ).filter(
+            cls.connection_active == True
         ).all()
