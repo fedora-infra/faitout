@@ -284,11 +284,9 @@ def clean_database(admin_engine, db_name):
     conn = admin_engine.connect()
     try:
         conn.execute("commit")
-        conn.execute("\c \"%s\"" % db_name)
+        conn.execute('drop database "%s";' % db_name)
         conn.execute("commit")
-        conn.execute('drop schema public cascade;')
-        conn.execute("commit")
-        conn.execute('create schema public;')
+        conn.execute('create database "%s";' % db_name)
         conn.execute("commit")
     finally:
         conn.close()
