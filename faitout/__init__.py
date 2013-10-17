@@ -55,6 +55,24 @@ SESSION = faitoutlib.create_session(APP.config['DB_URL'])
 ADMIN_ENGINE = faitoutlib.get_engine(APP.config['ADMIN_DB_URL'])
 
 
+def is_ip_allowed(remote_ip):
+    """ Returns wether a provided IP is allowed to ask for a new connections or
+    not. This relies on the IP_ONLY and the IP_BLOCKED fields set in the
+    configuration.
+
+    :arg remote_ip: the IP address of the user asking for a new connection.
+
+    """
+    if APP.config['IP_BLOCKED'] and remote_ip in APP.config['IP_BLOCKED']:
+        return False
+    if APP.config['IP_ONLY']:
+        if remote_ip in APP.config['IP_ONLY']:
+            return True
+        else:
+            return False
+    return True
+
+
 ## Flask application
 @APP.route('/')
 def index():
@@ -83,6 +101,17 @@ def token():
     else:
         mimetype = 'text/plain'
 
+    if not is_ip_allowed(flask.request.remote_addr):
+        return flask.Response(
+            response=json.dump(
+                    {'ERROR': 'NotAuthorizedException', 'description', 'IP '
+                    'address %s is not authorized to request new connections.' %
+                    flask.request.remote_addr}
+                ),
+            status=403,
+            mimetype='application/json'
+        )
+
     try:
         output = faitoutlib.get_new_connection(
             SESSION,
@@ -92,6 +121,7 @@ def token():
             port=APP.config['DB_PORT'],
             max_con=APP.config['MAX_CONNECTIONS'],
             outformat=outformat,
+            unlimited=flask.request.remote_addr in APP.config['IP_UNLIMITED']
         )
     except faitoutlib.TooManyConnectionException as err:
         output = {
