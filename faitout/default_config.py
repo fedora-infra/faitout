@@ -49,3 +49,17 @@ URL = 'http://127.0.0.1:5000'
 
 # The maximum number of simultaneous connection allowed at the same time
 MAX_CONNECTIONS = 3
+
+# List of IPs allowed to get as many connections as they want
+#  This is useful if for example you use faitout in combination with a jenkins
+#  instance or some other sort of CI system.
+IP_UNLIMITED = ['127.0.0.1']
+
+# List of IPs not allowed to get any connections
+IP_BLOCKED = []
+
+# Restrict the use of faitout to those IPs only
+#  This is useful either for testing or if you want to restrict your faitout
+#  instance to a group of people and not make it world accessible.
+IP_ONLY = []
+
