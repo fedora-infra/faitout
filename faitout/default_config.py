@@ -29,9 +29,6 @@ default_config - the default configuration allowing to run this project
  MA 02110-1301, USA.
 """
 
-import os
-
-
 # url to the database server:
 DB_URL = 'sqlite:////var/tmp/faitout_dev.sqlite'
 
