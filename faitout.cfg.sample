@@ -1,0 +1,60 @@
+###
+# This is the sample configuration file for faitout.
+# The variable are in capital letters and the values provided here are the
+# default values used in faitout.
+# Are mandatory to change:
+#  - DB_URL
+#  - ADMIN_DB_URL
+#  - DB_HOST
+#  - URL
+#
+# The other fields should be changed if they are different from the default
+# settings.
+###
+
+### Beware that the quotes around the values are mandatory
+
+
+### url to the database server where are stored the information about the
+### different databases created.
+#DB_URL=mysql://user:pass@host/db_name
+#DB_URL=postgres://user:pass@host/db_name
+
+### URL to the postgresql database server where the temporary databases will be
+### created. This needs to be a account with sufficient privileges so that new
+### databases and users can be created and deleted.
+#ADMIN_DB_URL=postgres://user:pass@host/db_name
+
+### Port of the postgresql server that users will use to connect to the database
+### server.
+### Defaults to 5432, default postgresql port.
+# DB_PORT = 5432
+
+### Host or IP that users will use to connect to the database server.
+# DB_HOST = '127.0.0.1'
+
+### The cron job can be set with any frequency but the frontend needs to know it
+### to retrieve the correct databases to delete when the cron job runs.
+# CRON_FREQUENCY = 30
+
+### URL at which the faitout application is made available.
+### Default to the default flask location and port.
+#URL = 'http://127.0.0.1:5000'
+
+### The maximum number of simultaneous active databases one can request.
+### Defaults to 3.
+#MAX_CONNECTIONS = 3
+
+### List of IPs allowed to get as many connections as they want
+###  This is useful if for example you use faitout in combination with a jenkins
+###  instance or some other sort of CI system.
+#IP_UNLIMITED = ['127.0.0.1']
+
+### List of IPs not allowed to get any connections
+#IP_BLOCKED = []
+
+### Restrict the use of faitout to those IPs only
+###  This is useful either for testing or if you want to restrict your faitout
+###  instance to a group of people and not make it world accessible.
+#IP_ONLY = []
+
