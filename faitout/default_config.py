@@ -41,7 +41,7 @@ DB_PORT = 5432
 # Host of the postgresql server to return to in the db url
 DB_HOST = '127.0.0.1'
 
-# The cron job can be set with any frequency but fedocal_cron
+# The cron job can be set with any frequency but faitout_cron
 CRON_FREQUENCY = 30
 
 # URL at which the application is made available
