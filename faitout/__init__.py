@@ -104,10 +104,10 @@ def token():
     if not is_ip_allowed(flask.request.remote_addr):
         return flask.Response(
             response=json.dump(
-                    {'ERROR': 'NotAuthorizedException', 'description', 'IP '
-                    'address %s is not authorized to request new connections.' %
-                    flask.request.remote_addr}
-                ),
+                {'ERROR': 'NotAuthorizedException', 'description':
+                 'IP address %s is not authorized to request new connections.'
+                 % flask.request.remote_addr}
+            ),
             status=403,
             mimetype='application/json'
         )

@@ -42,7 +42,7 @@ Create the database scheme::
 
 Run the server::
 
- sh runserver
+ python runserver.py
 
 You should be able to access the server at http://localhost:5000
 
