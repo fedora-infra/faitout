@@ -50,6 +50,17 @@ from faitout.faitoutlib import model
 
 DB_PATH = 'sqlite:///:memory:'
 
+try:
+    import requests
+    req = requests.get('http://209.132.184.152/faitout/new')
+    if req.status_code == 200:
+        DB_PATH = req.text
+    else:
+        print req.text
+except:
+    pass
+
+print "using: %s" % DB_PATH
 
 class Modeltests(unittest.TestCase):
     """ Model tests. """
