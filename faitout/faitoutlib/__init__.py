@@ -154,7 +154,7 @@ def get_new_connection(
     session.add(connection)
     try:
         session.commit()
-    except Exception as err:
+    except Exception as err:  # pragma: no cover
         session.rollback()
         print >> sys.stderr, err
         raise FaitoutException(
@@ -164,7 +164,7 @@ def get_new_connection(
     ## Create database, user and grant permission
     try:
         create_database(admin_engine, db_name, user, password)
-    except Exception as err:
+    except Exception as err:  # pragma: no cover
         print >> sys.stderr, err
         raise FaitoutException(
             'An error has occured, please contact the administrator'
@@ -195,7 +195,7 @@ def string_generator(length=15):
     return ''.join(random.choice(chars) for x in range(length))
 
 
-def create_database(admin_engine, db_name, username, password):
+def create_database(admin_engine, db_name, username, password):  # pragma: no cover
     """ Using the with the provided engine, create a new database with the
     specified name, create a new database user with the specified username
     and password and set this user as admin of this database.
@@ -262,7 +262,7 @@ def clean_connection(session, admin_engine, remote_ip, db_name):
 
     try:
         clean_database(admin_engine, db_name)
-    except Exception as err:
+    except Exception as err:  # pragma: no cover
         print >> sys.stderr, 'ERROR while cleaning\n', err
         raise FaitoutException(
             'An error has occured, please contact the administrator'
@@ -270,7 +270,7 @@ def clean_connection(session, admin_engine, remote_ip, db_name):
 
     return 'Database %s has been cleaned' % db_name
 
-def clean_database(admin_engine, db_name):
+def clean_database(admin_engine, db_name):  # pragma: no cover
     """ Using the provided engine, drop all tables ofthe specified database.
 
     :arg admin_engine: the engine used to connect to the database
@@ -335,7 +335,7 @@ def drop_connection(session, admin_engine, remote_ip, db_name):
 
     try:
         drop_database(admin_engine, db_name, connection.connection_user)
-    except Exception as err:
+    except Exception as err:  # pragma: no cover
         print >> sys.stderr, 'ERROR while dropping\n', err
         raise FaitoutException(
             'An error has occured, please contact the administrator'
@@ -344,7 +344,7 @@ def drop_connection(session, admin_engine, remote_ip, db_name):
     connection.connection_active = False
     try:
         session.commit()
-    except Exception as err:
+    except Exception as err:  # pragma: no cover
         session.rollback()
         print >> sys.stderr, err
         raise FaitoutException(
@@ -354,7 +354,7 @@ def drop_connection(session, admin_engine, remote_ip, db_name):
     return 'Database %s has been dropped' % db_name
 
 
-def drop_database(admin_engine, db_name, username):
+def drop_database(admin_engine, db_name, username):  # pragma: no cover
     """ Using the provided engine, drop the specified database and user.
 
     :arg admin_engine: the engine used to connect to the database
