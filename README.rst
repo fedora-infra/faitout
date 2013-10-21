@@ -63,6 +63,13 @@ To run them::
 
     ./runtests.sh -x
 
+.. note:: To know which database system (sqlite or postgres via faitout itself)
+   it is using, use the -s flag
+
+   ::
+
+       ./runtests.sh -s
+
 
 License:
 --------
