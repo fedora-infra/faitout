@@ -161,6 +161,8 @@ class Connection(BASE):
             cls.connection_active == True
         )
 
+        query = query.order_by(cls.connection_id)
+
         if cnt:
             return query.count()
         else:
