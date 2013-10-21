@@ -113,13 +113,35 @@ class Connection(BASE):
         session.delete(self)
 
     @classmethod
-    def get_all(cls, session):
-        """ Retrieve all the Calendar available.
+    def search(cls, session, active=None, cnt=False):
+        """ Retrieve all the connections matching the provided criterias.
+
+        :arg session: the session with which to connect to the database.
+        :kwarg active: Boolean specifying wether the active connections
+            should be active or not. It defaults to None, which will not
+            filter the returned connection on their status (thus include
+            both active and inactive connections).
+        :kwarg cnt: Boolean specifying to return either the list of
+            connections or the number of connections matching the criterias.
+
+        """
+        query = session.query(cls)
+
+        if cnt:
+            return query.count()
+        else:
+            return query.all()
+
+    @classmethod
+    def cnt_unique_ip(cls, session, active=None, cnt=False):
+        """ Retrieve the number of unique IP registered in the application.
 
         :arg session: the session with which to connect to the database.
 
         """
-        return session.query(cls).all()
+        query = session.query(sa.func.distinct(cls.connection_ip))
+
+        return query.count()
 
     @classmethod
     def by_ip(cls, session, ip, cnt=False):
