@@ -219,6 +219,7 @@ def create_database(admin_engine, db_name, username, password):
     finally:
         conn.close()
 
+
 def clean_connection(session, admin_engine, remote_ip, db_name):
     """ Drop all the table of the specified database.
 
@@ -234,6 +235,8 @@ def clean_connection(session, admin_engine, remote_ip, db_name):
     :arg remote_ip: the IP address of the user that requested a new
         connection.
     :arg db_name: the name of the database to drop.
+    :raise NoDatabaseException: thrown when the database name provided
+        could not be associated with any database.
     :raise WrongOriginException: if the user requested to drop the db from
         a different IP than the user asking for the db.
     :raise FaitoutException: generic exception raised in case of problem.
@@ -305,6 +308,8 @@ def drop_connection(session, admin_engine, remote_ip, db_name):
     :arg remote_ip: the IP address of the user that requested a new
         connection.
     :arg db_name: the name of the database to drop.
+    :raise NoDatabaseException: thrown when the database name provided
+        could not be associated with any database.
     :raise WrongOriginException: if the user requested to drop the db from
         a different IP than the user asking for the db.
     :raise FaitoutException: generic exception raised in case of problem.
