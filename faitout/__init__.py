@@ -81,6 +81,17 @@ def index():
     return flask.render_template('index.html')
 
 
+@APP.route('/stats/')
+@APP.route('/stats')
+def stats():
+    """ Provides some statistics about the current usage of faitout
+    """
+
+    stats = faitoutlib.get_stats(SESSION)
+
+    return flask.render_template('stats.html', stats=stats)
+
+
 @APP.route('/new/')
 @APP.route('/new')
 def token():
