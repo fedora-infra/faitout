@@ -127,6 +127,9 @@ class Connection(BASE):
         """
         query = session.query(cls)
 
+        if active is not None:
+            query = query.filter(connection_active == active)
+
         if cnt:
             return query.count()
         else:
