@@ -7,6 +7,10 @@
 How to use faitout?
 ===================
 
+
+Create a new connection
+-----------------------
+
 The usage is simple:
 
   curl {{ config.URL }}{{ url_for('token') }}
@@ -24,14 +28,36 @@ Retrieve the same information as json:
     "host": "host.com"
   }
 
+Accepts also the 'Content-Type' header.
 
-Need to have one more connection while you are already at the maximum?
 
-Clean one of your connection by drop the database
+Clean a connection
+------------------
+
+Clean one of your connection by dropping and re-creating the database
 
   curl {{ config.URL }}{{ url_for('clean_database', db_name='db_name') }}
+  Database db_name has been cleaned
+
+
+Drop a connection
+------------------
+
+Drop one of your connection by dropping the database
+
+  curl {{ config.URL }}{{ url_for('drop_database', db_name='db_name') }}
   Database db_name has been dropped
 
+
+Get some stats about the current faitout
+----------------------------------------
+
+Check out: {{ config.URL }}{{ url_for('stats') }}
+
+
+
+Faitout and other tools
+=======================
 
 
 faitout and python
@@ -43,7 +69,6 @@ You may then set the SQLAlchemy URL in one line as follow:
     DATABASE_URL = get('{{ config.URL }}{{ url_for('token') }}').text
 
 
-
 faitout and Travis CI
 ---------------------
 
@@ -53,6 +78,5 @@ Simply add the following to your .travis.yml
 
 env:
 - DATABASE_URL=$(curl {{ config.URL }}{{ url_for('token') }})
-
 
 {% endblock %}
