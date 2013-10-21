@@ -104,14 +104,6 @@ class Connection(BASE):
             self.connection_id, self.connection_ip, self.creation_date,
             self.connection_db_name)
 
-    def save(self, session):
-        """ Save the object into the database. """
-        session.add(self)
-
-    def delete(self, session):
-        """ Remove the object into the database. """
-        session.delete(self)
-
     @classmethod
     def search(cls, session, active=None, cnt=False):
         """ Retrieve all the connections matching the provided criterias.
