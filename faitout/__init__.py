@@ -196,3 +196,52 @@ def clean_database(db_name):
         status=status,
         mimetype=mimetype
     )
+
+
+@APP.route('/drop/<db_name>/')
+@APP.route('/drop/<db_name>')
+def drop_database(db_name):
+    """ Drop the provided database.
+    """
+    status = 200
+    outformat = 'text'
+    mimetype = 'text/plain'
+
+    try:
+        output = faitoutlib.drop_connection(
+            SESSION,
+            ADMIN_ENGINE,
+            flask.request.remote_addr,
+            db_name
+        )
+    except faitoutlib.NoDatabaseException as err:
+        output = {
+            'ERROR': err.__class__.__name__,
+            'description': err.message
+        }
+        status = 404
+        mimetype = 'application/json'
+    except faitoutlib.WrongOriginException as err:
+        output = {
+            'ERROR': err.__class__.__name__,
+            'description': err.message
+        }
+        status = 403
+        mimetype = 'application/json'
+    except faitoutlib.FaitoutException as err:
+        print >> sys.stderr, err
+        output = {
+            'ERROR': err.__class__.__name__,
+            'description': err.message
+        }
+        status = 500
+        mimetype = 'application/json'
+
+    if outformat == 'json' or mimetype == 'application/json':
+        output = json.dumps(output)
+
+    return flask.Response(
+        response=output,
+        status=status,
+        mimetype=mimetype
+    )
