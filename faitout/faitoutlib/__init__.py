@@ -137,7 +137,8 @@ def get_new_connection(
 
     ## Check if user is allowed to ask for a new connection
     if not unlimited \
-            and model.Connection.by_ip(session, remote_ip, cnt=True) >= max_con:
+            and model.Connection.by_ip(
+            session, remote_ip, cnt=True) >= max_con:
         raise TooManyConnectionException(
             '%s has already 3 active connection, please re-try later' %
             remote_ip
@@ -269,6 +270,7 @@ def clean_connection(session, admin_engine, remote_ip, db_name):
         )
 
     return 'Database %s has been cleaned' % db_name
+
 
 def clean_database(admin_engine, db_name):  # pragma: no cover
     """ Using the provided engine, drop all tables ofthe specified database.

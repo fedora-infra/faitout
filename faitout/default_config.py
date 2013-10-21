@@ -62,4 +62,3 @@ IP_BLOCKED = []
 #  This is useful either for testing or if you want to restrict your faitout
 #  instance to a group of people and not make it world accessible.
 IP_ONLY = []
-
