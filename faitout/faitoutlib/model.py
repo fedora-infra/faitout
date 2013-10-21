@@ -130,6 +130,8 @@ class Connection(BASE):
         if active is not None:
             query = query.filter(cls.connection_active == active)
 
+        query = query.order_by(cls.connection_id)
+
         if cnt:
             return query.count()
         else:
