@@ -209,7 +209,10 @@ def create_database(admin_engine, db_name, username, password):  # pragma: no co
     """
     conn = admin_engine.connect()
     try:
-        conn.execute("commit")
+        try:
+            conn.execute("commit")
+        except:
+            pass
         conn.execute("CREATE USER \"%s\" WITH PASSWORD '%s';" %
                      (username, password))
         conn.execute("commit")
@@ -281,7 +284,10 @@ def clean_database(admin_engine, db_name):  # pragma: no cover
     """
     conn = admin_engine.connect()
     try:
-        conn.execute("commit")
+        try:
+            conn.execute("commit")
+        except:
+            pass
         conn.execute("SELECT pg_terminate_backend(pg_stat_activity.pid)"
                      " FROM pg_stat_activity"
                      " WHERE pg_stat_activity.datname = '%s'"
@@ -366,7 +372,10 @@ def drop_database(admin_engine, db_name, username):  # pragma: no cover
     """
     conn = admin_engine.connect()
     try:
-        conn.execute("commit")
+        try:
+            conn.execute("commit")
+        except:
+            pass
         conn.execute("SELECT pg_terminate_backend(pg_stat_activity.pid)"
                      " FROM pg_stat_activity"
                      " WHERE pg_stat_activity.datname = '%s'"
