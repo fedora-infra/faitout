@@ -376,3 +376,20 @@ def drop_database(admin_engine, db_name, username):
         conn.execute("commit")
     finally:
         conn.close()
+
+
+def get_stats(session):
+    """ Retrieve some statistics about the current usage of faitout.
+
+    :arg session: the session with which to connect to the faitout database.
+
+    """
+    output = {}
+
+    output['total_connections'] = model.Connection.search(
+        session, cnt=True)
+    output['active_connections'] = model.Connection.search(
+        session, active=True, cnt=True)
+    output['unique_ip'] = model.Connection.cnt_unique_ip(session)
+
+    return output
