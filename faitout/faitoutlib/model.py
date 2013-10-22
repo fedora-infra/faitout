@@ -32,14 +32,10 @@ model - an object mapper to a SQL database representation of the data
 __requires__ = ['SQLAlchemy >= 0.7']
 import pkg_resources
 
-#from datetime import datetime
-#from datetime import timedelta
-
 import sqlalchemy as sa
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import scoped_session
-#from sqlalchemy.orm import relation as relationship
 
 BASE = declarative_base()
 

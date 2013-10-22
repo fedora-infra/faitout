@@ -32,16 +32,11 @@ __requires__ = ['SQLAlchemy >= 0.7']
 import pkg_resources
 
 import unittest
-#import shutil
 import sys
 import os
 
 from datetime import datetime
 from datetime import timedelta
-
-#from sqlalchemy import create_engine
-#from sqlalchemy.orm import sessionmaker
-#from sqlalchemy.orm import scoped_session
 
 sys.path.insert(0, os.path.join(os.path.dirname(
     os.path.abspath(__file__)), '..'))
