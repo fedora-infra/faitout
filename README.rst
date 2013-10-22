@@ -25,6 +25,12 @@ Dependencies:
 * `python <http://www.python.org>`_
 * `python-flask <http://flask.pocoo.org/>`_
 * `python-psycopg2 <http://www.initd.org/psycopg/>`_
+* `python-sqlalchemy <http://www.sqlalchemy.org/>`_
+
+Dependencies for test:
+* `python-nose <http://nose.readthedocs.org/en/latest/>`_
+* `python-mock <http://www.voidspace.org.uk/python/mock/>`_
+* `python-coverage <http://nedbatchelder.com/code/coverage/>`_
 
 
 Running a development instance:
