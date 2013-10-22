@@ -5,3 +5,5 @@ SQLAlchemy >= 0.7
 alembic
 jinja2 >= 2.4
 mock
+
+requests # this one is required only for the unit-tests to run on faitout
