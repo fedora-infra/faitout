@@ -99,18 +99,14 @@ def token():
     """
     status = 200
     outformat = 'text'
+    mimetype = 'text/plain'
 
-    if 'Accept' in flask.request.headers:
-        if flask.request.headers['Accept'] == 'application/json':
-            outformat = 'json'
-    elif 'Content-Type' in flask.request.headers:
-        if flask.request.headers['Content-Type'] == 'application/json':
-            outformat = 'json'
+    if flask.request.headers.get('Accept') == 'application/json' or \
+       flask.request.headers.get('Content-Type') == 'application/json':
+        outformat = 'json'
 
     if outformat == 'json':
         mimetype = 'application/json'
-    else:
-        mimetype = 'text/plain'
 
     if not is_ip_allowed(flask.request.remote_addr):
         return flask.Response(
