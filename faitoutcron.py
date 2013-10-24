@@ -96,5 +96,4 @@ def run_cron(debug=False, test=False):
 
 if __name__ == '__main__':
     args = get_arguments()
-    print args
     run_cron(debug=args.debug, test=args.test)
