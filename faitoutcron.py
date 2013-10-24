@@ -83,6 +83,8 @@ def run_cron(debug=False, test=False):
             print connection
         try:
             if not test:
+                if debug:
+                    print '... dropping'
                 output = faitoutlib.drop_connection(
                     SESSION,
                     ADMIN_ENGINE,
