@@ -17,13 +17,13 @@
 
 ### url to the database server where are stored the information about the
 ### different databases created.
-#DB_URL=mysql://user:pass@host/db_name
-#DB_URL=postgres://user:pass@host/db_name
+#DB_URL='mysql://user:pass@host/db_name'
+#DB_URL='postgres://user:pass@host/db_name'
 
 ### URL to the postgresql database server where the temporary databases will be
 ### created. This needs to be a account with sufficient privileges so that new
 ### databases and users can be created and deleted.
-#ADMIN_DB_URL=postgres://user:pass@host/db_name
+#ADMIN_DB_URL='postgres://user:pass@host/db_name'
 
 ### Port of the postgresql server that users will use to connect to the database
 ### server.
