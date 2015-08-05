@@ -26,6 +26,7 @@ Dependencies:
 * `python-sqlalchemy <http://www.sqlalchemy.org/>`_
 
 Dependencies for test:
+
 * `python-nose <http://nose.readthedocs.org/en/latest/>`_
 * `python-mock <http://www.voidspace.org.uk/python/mock/>`_
 * `python-coverage <http://nedbatchelder.com/code/coverage/>`_
