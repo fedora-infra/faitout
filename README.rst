@@ -15,9 +15,7 @@ Get this project:
 -----------------
 Source:  https://github.com/fedora-infra/faitout
 
-Documentation: http://faitout.rtfd.org
-
-Testing instance: http://209.132.184.152/faitout
+Instance: http://faitout.fedorainfracloud.org/
 
 
 Dependencies:
