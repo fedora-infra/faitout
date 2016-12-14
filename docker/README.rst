@@ -1,6 +1,14 @@
 Using faitout on docker
 =======================
 
+
+.. warning:: The Dockerfile and the files provided here are only meant to be use
+             for local development, do not run a production instance of faitout
+             in docker using these files without at least changing the passwords
+             in ``setup_db.sql`` and ``faitout.cfg``.
+             You have been warned :)
+
+
 Build the docker image
 ----------------------
 
