@@ -1,4 +1,3 @@
-FROM fedora
 FROM fedora:25
 ENV FAITOUT_CONFIG /etc/faitout/config.py
 RUN dnf install -y --setopt=tsflags=nodocs \
