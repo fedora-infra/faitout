@@ -3,7 +3,7 @@
 """
 faitoutlib - the backend library performing the actual work of this project.
 
- (c) 2013 - Copyright Red Hat Inc.
+ (c) 2013-2016 - Copyright Red Hat Inc.
 
  Authors:
  - Pierre-Yves Chibon <pingou@pingoured.fr>
@@ -402,5 +402,23 @@ def get_stats(session):
     output['active_connections'] = model.Connection.search(
         session, active=True, cnt=True)
     output['unique_ip'] = model.Connection.cnt_unique_ip(session)
+
+    return output
+
+
+def get_ip_stats(session, ipaddr):
+    """ Retrieve some statistics about the current usage of faitout by a
+    given IP address.
+
+    :arg session: the session with which to connect to the faitout database.
+    :arg ipaddr: the IP address of interest.
+
+    """
+    output = {}
+
+    output['total_connections'] = model.Connection.search(
+        session, ip=ipaddr, cnt=True)
+    output['active_connections'] = model.Connection.by_ip(
+        session, ip=ipaddr)
 
     return output

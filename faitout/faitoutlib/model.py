@@ -4,7 +4,7 @@
 model - an object mapper to a SQL database representation of the data
         stored in this project.
 
- (c) 2013 - Copyright Red Hat Inc.
+ (c) 2013-2016 - Copyright Red Hat Inc.
 
  Authors:
  - Pierre-Yves Chibon <pingou@pingoured.fr>
@@ -101,7 +101,7 @@ class Connection(BASE):
             self.connection_db_name)
 
     @classmethod
-    def search(cls, session, active=None, cnt=False):
+    def search(cls, session, active=None, ip=None, cnt=False):
         """ Retrieve all the connections matching the provided criterias.
 
         :arg session: the session with which to connect to the database.
@@ -109,6 +109,7 @@ class Connection(BASE):
             should be active or not. It defaults to None, which will not
             filter the returned connection on their status (thus include
             both active and inactive connections).
+        :kwarg ip: The IP address to restrict the results to.
         :kwarg cnt: Boolean specifying to return either the list of
             connections or the number of connections matching the criterias.
 
@@ -117,6 +118,9 @@ class Connection(BASE):
 
         if active is not None:
             query = query.filter(cls.connection_active == active)
+
+        if ip is not None:
+            query = query.filter(cls.connection_ip == ip)
 
         query = query.order_by(cls.connection_id)
 

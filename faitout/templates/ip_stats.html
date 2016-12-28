@@ -1,0 +1,33 @@
+{% extends "master.html" %}
+
+{% block title %} Stats {% endblock %}
+
+{% block content %}
+
+
+Statistics for the IP address: {{ ip }}
+==============================
+
+There are currently in faitout:
+
+
+Total number of connections         : {{ stats['total_connections'] }}
+
+Total number of active connections  : {{ stats['active_connections'] | length }}
+
+{% if stats['active_connections'] %}
+Active Connections:
+{% for connection in stats['active_connections'] %}
+  Connection #{{ loop.index }} created on {{ connection.creation_date.isoformat() }}
+{% endfor %}
+{% endif %}
+
+{% if ip in config['IP_UNLIMITED'] %}
+This IP can have un-limited sessions.
+{% elif ip in config['IP_UNLIMITED'] %}
+This IP has been blocked.
+{% else %}
+This IP can request up to {{ config['MAX_CONNECTIONS'] }} active connections.
+{% endif %}
+
+{% endblock %}
