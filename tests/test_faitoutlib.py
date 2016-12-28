@@ -3,7 +3,7 @@
 """
 faitoutlib - Tests the model.
 
- (c) 2013 - Copyright Red Hat Inc.
+ (c) 2013-2016 - Copyright Red Hat Inc.
 
  Authors:
  - Pierre-Yves Chibon <pingou@pingoured.fr>
@@ -64,6 +64,26 @@ class FaitoutLibtests(Modeltests):
                 'unique_ip': 2,
             }
         )
+
+    def test_get_ip_stats(self):
+        """ Test the get_ip_stats method of faitoutlib. """
+        create_connections(self.session)
+
+        output = faitoutlib.get_ip_stats(self.session, '127.0.0.1')
+        self.assertEqual(
+            output.keys(), ['total_connections', 'active_connections'])
+        self.assertEqual(
+            output['total_connections'], 3)
+        self.assertEqual(
+            len(output['active_connections']), 3)
+
+        output = faitoutlib.get_ip_stats(self.session, '127.0.0.2')
+        self.assertEqual(
+            output.keys(), ['total_connections', 'active_connections'])
+        self.assertEqual(
+            output['total_connections'], 1)
+        self.assertEqual(
+            len(output['active_connections']), 0)
 
     def test_get_new_connection(self):
         """ Test the get_new_connection method of faitoutlib. """
