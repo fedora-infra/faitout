@@ -4,7 +4,7 @@
 model - an object mapper to a SQL database representation of the data
         stored in this project.
 
- (c) 2013-2016 - Copyright Red Hat Inc.
+ (c) 2013-2017 - Copyright Red Hat Inc.
 
  Authors:
  - Pierre-Yves Chibon <pingou@pingoured.fr>
@@ -139,34 +139,6 @@ class Connection(BASE):
         query = session.query(sa.func.distinct(cls.connection_ip))
 
         return query.count()
-
-    @classmethod
-    def by_ip(cls, session, ip, cnt=False):
-        """ Retrieve all the active Connection associated with the
-        specified IP.
-
-        :arg session: the session with which to connect to the database.
-        :arg remote_ip: the IP address of the user that requested a new
-            connection.
-        :kwarg cnt: a boolean to specify wether to return the list of
-            connection associated with this IP or just the number of
-            entries.
-
-        """
-        query = session.query(
-            cls
-        ).filter(
-            cls.connection_ip == ip
-        ).filter(
-            cls.connection_active == True
-        )
-
-        query = query.order_by(cls.connection_id)
-
-        if cnt:
-            return query.count()
-        else:
-            return query.all()
 
     @classmethod
     def by_db_name(cls, session, db_name):

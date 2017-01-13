@@ -3,7 +3,7 @@
 """
 faitoutlib - Tests the model.
 
- (c) 2013-2016 - Copyright Red Hat Inc.
+ (c) 2013-2017 - Copyright Red Hat Inc.
 
  Authors:
  - Pierre-Yves Chibon <pingou@pingoured.fr>
@@ -91,8 +91,8 @@ class FaitoutLibtests(Modeltests):
 
         faitoutlib.create_database = mock.MagicMock()
 
-        self.assertEqual(model.Connection.by_ip(
-            self.session, '127.0.0.1', cnt=True), 3)
+        self.assertEqual(model.Connection.search(
+            self.session, ip='127.0.0.1', active=True, cnt=True), 3)
         # Fails as 127.0.0.1 already has 3 active connections
         self.assertRaises(
             faitoutlib.TooManyConnectionException,
@@ -106,11 +106,11 @@ class FaitoutLibtests(Modeltests):
             outformat='text',
             unlimited=False
             )
-        self.assertEqual(model.Connection.by_ip(
-            self.session, '127.0.0.1', cnt=True), 3)
+        self.assertEqual(model.Connection.search(
+            self.session, ip='127.0.0.1', active=True, cnt=True), 3)
 
-        self.assertEqual(model.Connection.by_ip(
-            self.session, '127.0.0.2', cnt=True), 0)
+        self.assertEqual(model.Connection.search(
+            self.session, ip='127.0.0.2', active=True, cnt=True), 0)
         connection = faitoutlib.get_new_connection(
             self.session,
             admin_engine=None,
@@ -123,11 +123,11 @@ class FaitoutLibtests(Modeltests):
             )
         self.assertTrue(connection.startswith('postgresql://'))
         self.assertTrue('localhost:5432' in connection)
-        self.assertEqual(model.Connection.by_ip(
-            self.session, '127.0.0.2', cnt=True), 1)
+        self.assertEqual(model.Connection.search(
+            self.session, ip='127.0.0.2', active=True, cnt=True), 1)
 
-        self.assertEqual(model.Connection.by_ip(
-            self.session, '127.0.0.2', cnt=True), 1)
+        self.assertEqual(model.Connection.search(
+            self.session, ip='127.0.0.2', active=True, cnt=True), 1)
         connection = faitoutlib.get_new_connection(
             self.session,
             admin_engine=None,
@@ -143,11 +143,11 @@ class FaitoutLibtests(Modeltests):
             ['dbname', 'host', 'password', 'port', 'username'])
         self.assertEqual(connection['host'], 'localhost')
         self.assertEqual(connection['port'], 5432)
-        self.assertEqual(model.Connection.by_ip(
-            self.session, '127.0.0.2', cnt=True), 2)
+        self.assertEqual(model.Connection.search(
+            self.session, ip='127.0.0.2', active=True, cnt=True), 2)
 
-        self.assertEqual(model.Connection.by_ip(
-            self.session, '127.0.0.1', cnt=True), 3)
+        self.assertEqual(model.Connection.search(
+            self.session, ip='127.0.0.1', active=True, cnt=True), 3)
         connection = faitoutlib.get_new_connection(
             self.session,
             admin_engine=None,
@@ -158,8 +158,8 @@ class FaitoutLibtests(Modeltests):
             outformat='json',
             unlimited=True
             )
-        self.assertEqual(model.Connection.by_ip(
-            self.session, '127.0.0.1', cnt=True), 4)
+        self.assertEqual(model.Connection.search(
+            self.session, ip='127.0.0.1', active=True, cnt=True), 4)
         self.assertEqual(
             sorted(connection.keys()),
             ['dbname', 'host', 'password', 'port', 'username'])
