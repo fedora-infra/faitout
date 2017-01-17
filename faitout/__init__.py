@@ -5,7 +5,7 @@ faitout - a flask application generating PostgreSQL databases on the fly
           and for a limited time allowing people to test their code against
           an actual PostgreSQL database.
 
- (c) 2013 - Copyright Red Hat Inc.
+ (c) 2013-2016 - Copyright Red Hat Inc.
 
  Authors:
  - Pierre-Yves Chibon <pingou@pingoured.fr>
@@ -90,6 +90,17 @@ def stats():
     stats = faitoutlib.get_stats(SESSION)
 
     return flask.render_template('stats.html', stats=stats)
+
+
+@APP.route('/info/')
+@APP.route('/info')
+def info():
+    """ Provides the user information about the current session for their IP
+    """
+    ipaddr = flask.request.remote_addr
+    stats = faitoutlib.get_ip_stats(SESSION, ipaddr)
+
+    return flask.render_template('ip_stats.html', stats=stats, ip=ipaddr)
 
 
 @APP.route('/new/')

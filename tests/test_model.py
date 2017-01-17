@@ -3,7 +3,7 @@
 """
 faitoutlib - Tests the model.
 
- (c) 2013 - Copyright Red Hat Inc.
+ (c) 2013-2017 - Copyright Red Hat Inc.
 
  Authors:
  - Pierre-Yves Chibon <pingou@pingoured.fr>
@@ -70,22 +70,17 @@ class FaitoutModeltests(Modeltests):
             self.session, active=True, cnt=True)
         self.assertEqual(connections, 3)
 
-    def test_cnt_unique_ip(self):
-        """ Test the cnt_unique_ip method of Connection. """
+    def test_search_by_ip(self):
+        """ Test the search using an ip method of Connection. """
         create_connections(self.session)
 
-        unique_ip = model.Connection.cnt_unique_ip(self.session)
-        self.assertEqual(unique_ip, 2)
-
-    def test_by_ip(self):
-        """ Test the by_ip method of Connection. """
-        create_connections(self.session)
-
-        connections = model.Connection.by_ip(self.session, '127.0.0.2')
+        connections = model.Connection.search(
+            self.session, ip='127.0.0.2', active=True)
         self.assertEqual(len(connections), 0)
         self.assertEqual(connections, [])
 
-        connections = model.Connection.by_ip(self.session, '127.0.0.1')
+        connections = model.Connection.search(
+            self.session, ip='127.0.0.1', active=True)
         self.assertEqual(len(connections), 3)
         self.assertTrue(connections[0].__repr__().startswith(
             "<Connection('1' ip:'127.0.0.1'"))
@@ -94,9 +89,16 @@ class FaitoutModeltests(Modeltests):
         self.assertTrue(connections[2].__repr__().startswith(
             "<Connection('3' ip:'127.0.0.1'"))
 
-        connections = model.Connection.by_ip(
-            self.session, '127.0.0.1', cnt=True)
+        connections = model.Connection.search(
+            self.session, ip='127.0.0.1', active=True, cnt=True)
         self.assertEqual(connections, 3)
+
+    def test_cnt_unique_ip(self):
+        """ Test the cnt_unique_ip method of Connection. """
+        create_connections(self.session)
+
+        unique_ip = model.Connection.cnt_unique_ip(self.session)
+        self.assertEqual(unique_ip, 2)
 
     def test_by_db_name(self):
         """ Test the by_db_name method of Connection. """

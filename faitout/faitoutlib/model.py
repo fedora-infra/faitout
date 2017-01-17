@@ -4,7 +4,7 @@
 model - an object mapper to a SQL database representation of the data
         stored in this project.
 
- (c) 2013 - Copyright Red Hat Inc.
+ (c) 2013-2017 - Copyright Red Hat Inc.
 
  Authors:
  - Pierre-Yves Chibon <pingou@pingoured.fr>
@@ -101,7 +101,7 @@ class Connection(BASE):
             self.connection_db_name)
 
     @classmethod
-    def search(cls, session, active=None, cnt=False):
+    def search(cls, session, active=None, ip=None, cnt=False):
         """ Retrieve all the connections matching the provided criterias.
 
         :arg session: the session with which to connect to the database.
@@ -109,6 +109,7 @@ class Connection(BASE):
             should be active or not. It defaults to None, which will not
             filter the returned connection on their status (thus include
             both active and inactive connections).
+        :kwarg ip: The IP address to restrict the results to.
         :kwarg cnt: Boolean specifying to return either the list of
             connections or the number of connections matching the criterias.
 
@@ -117,6 +118,9 @@ class Connection(BASE):
 
         if active is not None:
             query = query.filter(cls.connection_active == active)
+
+        if ip is not None:
+            query = query.filter(cls.connection_ip == ip)
 
         query = query.order_by(cls.connection_id)
 
@@ -135,34 +139,6 @@ class Connection(BASE):
         query = session.query(sa.func.distinct(cls.connection_ip))
 
         return query.count()
-
-    @classmethod
-    def by_ip(cls, session, ip, cnt=False):
-        """ Retrieve all the active Connection associated with the
-        specified IP.
-
-        :arg session: the session with which to connect to the database.
-        :arg remote_ip: the IP address of the user that requested a new
-            connection.
-        :kwarg cnt: a boolean to specify wether to return the list of
-            connection associated with this IP or just the number of
-            entries.
-
-        """
-        query = session.query(
-            cls
-        ).filter(
-            cls.connection_ip == ip
-        ).filter(
-            cls.connection_active == True
-        )
-
-        query = query.order_by(cls.connection_id)
-
-        if cnt:
-            return query.count()
-        else:
-            return query.all()
 
     @classmethod
     def by_db_name(cls, session, db_name):

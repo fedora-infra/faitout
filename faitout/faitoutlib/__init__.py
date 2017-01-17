@@ -3,7 +3,7 @@
 """
 faitoutlib - the backend library performing the actual work of this project.
 
- (c) 2013 - Copyright Red Hat Inc.
+ (c) 2013-2017 - Copyright Red Hat Inc.
 
  Authors:
  - Pierre-Yves Chibon <pingou@pingoured.fr>
@@ -137,8 +137,8 @@ def get_new_connection(
 
     ## Check if user is allowed to ask for a new connection
     if not unlimited \
-            and model.Connection.by_ip(
-            session, remote_ip, cnt=True) >= max_con:
+            and model.Connection.search(
+                session, ip=remote_ip, active=True, cnt=True) >= max_con:
         raise TooManyConnectionException(
             '%s has already 3 active connection, please re-try later' %
             remote_ip
@@ -402,5 +402,23 @@ def get_stats(session):
     output['active_connections'] = model.Connection.search(
         session, active=True, cnt=True)
     output['unique_ip'] = model.Connection.cnt_unique_ip(session)
+
+    return output
+
+
+def get_ip_stats(session, ipaddr):
+    """ Retrieve some statistics about the current usage of faitout by a
+    given IP address.
+
+    :arg session: the session with which to connect to the faitout database.
+    :arg ipaddr: the IP address of interest.
+
+    """
+    output = {}
+
+    output['total_connections'] = model.Connection.search(
+        session, ip=ipaddr, cnt=True)
+    output['active_connections'] = model.Connection.search(
+        session, ip=ipaddr, active=True)
 
     return output
